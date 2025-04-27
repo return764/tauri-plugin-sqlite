@@ -16,7 +16,7 @@ export interface QueryResult {
 
 export interface SqlOptions {
   db_url: string,
-  extensions: string[],
+  extensions?: string[],
 }
 
 /**
