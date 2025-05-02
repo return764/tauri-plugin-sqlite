@@ -25,7 +25,7 @@ yarn add tauri-plugin-sqlite-api
 
 ## Usage
 
-### Initalize plugin
+### Initialize plugin
 
 Configure plugin in `tauri.conf.json`：
 
@@ -69,21 +69,32 @@ fn main() {
 ### Frontend api
 
 ```typescript
-import { load, execute, select, close } from 'tauri-plugin-sqlite-api';
+import Database from "tauri-plugin-sqlite-api";
+
+type User = {
+    id: number,
+    name: string
+}
 
 // load database
-const db = await load({
-  db_url: 'sqlite:test.db'
+const db = await Database.load({
+  db_url: 'sqlite:test.db',
+  extensions: ["some extension"]
 });
 
 // execute
-const result = await execute(db, 'INSERT INTO users (name) VALUES (?)', ['John']);
+const result = await db.execute('INSERT INTO users (name) VALUES (?)', ['John']);
 console.log(result); // { rowsAffected: 1, lastInsertId: 1 }
 
 // select
-const rows = await select(db, 'SELECT * FROM users WHERE name = ?', ['John']);
+const rows = await db.select<User>('SELECT * FROM users WHERE name = ?', ['John']);
 console.log(rows); // [{ id: 1, name: 'John' }]
 
 // close
-await close(db);
+await db.close(db);
 ```
+
+### Update Plan
+- [ ] support more sqlite options
+- [ ] support orm?
+- [ ] support database transaction
